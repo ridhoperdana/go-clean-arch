@@ -1,6 +1,32 @@
 package graphql
 
-import "github.com/graphql-go/graphql"
+import (
+	"context"
+	"fmt"
+	"github.com/graphql-go/graphql"
+	"github.com/bxcodec/go-clean-arch/article"
+	"github.com/bxcodec/go-clean-arch/article/repository"
+	"github.com/bxcodec/go-clean-arch/models"
+)
+
+
+// ArticleEdge holds information of article edge.
+type ArticleEdge struct {
+	Node   models.Article
+	Cursor string
+}
+
+// ArticleResult holds information of article result.
+type ArticleResult struct {
+	Edges    []ArticleEdge
+	PageInfo PageInfo
+}
+
+// PageInfo holds information of page info.
+type PageInfo struct {
+	EndCursor   string
+	HasNextPage bool
+}
 
 type Resolver interface {
 	FetchArticle(params graphql.ResolveParams) (interface{}, error)
@@ -10,4 +36,80 @@ type Resolver interface {
 	UpdateArticle(params graphql.ResolveParams) (interface{}, error)
 	StoreArticle(params graphql.ResolveParams) (interface{}, error)
 	DeleteArticle(params graphql.ResolveParams) (interface{}, error)
+}
+
+type resolver struct {
+	articleService article.Usecase
+}
+
+func (r resolver) FetchArticle(params graphql.ResolveParams) (interface{}, error) {
+	ctx := context.Background()
+	num := 0
+	cursor := ""
+	if cursorFromClient, ok := params.Args["after"].(string); ok {
+		cursor = cursorFromClient
+	}
+
+	if numFromClient, ok := params.Args["first"].(int); ok {
+		num = numFromClient
+	}
+
+	results, cursorFromService, err := r.articleService.Fetch(ctx, cursor, int64(num))
+	if err != nil {
+		return nil, err
+	}
+
+	edges := make([]ArticleEdge, len(results))
+	for index, result := range results {
+		if result != nil {
+			edges[index] = ArticleEdge{
+				Node: *result,
+				Cursor: repository.EncodeCursor(result.CreatedAt),
+			}
+		}
+	}
+
+	isHasNextPage := false
+	if len(results) > 0 {
+		results, _, err := r.articleService.Fetch(ctx, cursorFromService, int64(1))
+		if err != nil {
+			return nil, err
+		}
+
+		if len(results) > 0 {
+			isHasNextPage = true
+		}
+	}
+
+	return ArticleResult{
+		Edges: edges,
+		PageInfo:PageInfo{
+			EndCursor: cursorFromService,
+			HasNextPage:isHasNextPage,
+		},
+	}, fmt.Errorf("please implement me")
+}
+
+func (r resolver) GetArticleByID(params graphql.ResolveParams) (interface{}, error) {
+	return nil, fmt.Errorf("please implement me")
+}
+
+func (r resolver) GetArticleByTitle(params graphql.ResolveParams) (interface{}, error) {
+	return nil, fmt.Errorf("please implement me")
+}
+
+func (r resolver) UpdateArticle(params graphql.ResolveParams) (interface{}, error) {
+	return nil, fmt.Errorf("please implement me")
+}
+
+func (r resolver) StoreArticle(params graphql.ResolveParams) (interface{}, error) {
+	return nil, fmt.Errorf("please implement me")
+}
+
+func (r resolver) DeleteArticle(params graphql.ResolveParams) (interface{}, error) {
+	return nil, fmt.Errorf("please implement me")
+}
+
+func NewResolver() Resolver {
+	return &resolver{}
 }

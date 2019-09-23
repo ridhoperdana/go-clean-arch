@@ -2,8 +2,8 @@ package graphql
 
 import "github.com/graphql-go/graphql"
 
-// Article holds article information with graphql object
-var Article = graphql.NewObject(
+// ArticleGraphQL holds article information with graphql object
+var ArticleGraphQL = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Article",
 		Fields: graphql.Fields{
@@ -26,13 +26,13 @@ var Article = graphql.NewObject(
 	},
 )
 
-// ArticleEdge holds article edge information with graphql object
-var ArticleEdge = graphql.NewObject(
+// ArticleEdgeGraphQL holds article edge information with graphql object
+var ArticleEdgeGraphQL = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "ArticleEdge",
 		Fields: graphql.Fields{
 			"node": &graphql.Field{
-				Type: Article,
+				Type: ArticleGraphQL,
 			},
 			"cursor": &graphql.Field{
 				Type: graphql.String,
@@ -41,22 +41,22 @@ var ArticleEdge = graphql.NewObject(
 	},
 )
 
-// ArticleResult holds article result information with graphql object
-var ArticleResult = graphql.NewObject(
+// ArticleResultGraphQL holds article result information with graphql object
+var ArticleResultGraphQL = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "ArticleResult",
 		Fields: graphql.Fields{
 			"edges": &graphql.Field{
-				Type: graphql.NewList(ArticleEdge),
+				Type: graphql.NewList(ArticleEdgeGraphQL),
 			},
 			"pageInfo": &graphql.Field{
-				Type: pageInfo,
+				Type: pageInfoGraphQL,
 			},
 		},
 	},
 )
 
-var pageInfo = graphql.NewObject(
+var pageInfoGraphQL = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "PageInfo",
 		Fields: graphql.Fields{
@@ -81,7 +81,7 @@ func (s Schema) Query() *graphql.Object {
 		Name: "Query",
 		Fields: graphql.Fields{
 			"FetchArticle": &graphql.Field{
-				Type:        ArticleResult,
+				Type:        ArticleResultGraphQL,
 				Description: "Fetch Article",
 				Args: graphql.FieldConfigArgument{
 					"first": &graphql.ArgumentConfig{
@@ -94,7 +94,7 @@ func (s Schema) Query() *graphql.Object {
 				Resolve: s.articleResolver.FetchArticle,
 			},
 			"GetArticleByID": &graphql.Field{
-				Type:        Article,
+				Type:        ArticleGraphQL,
 				Description: "Get Article By ID",
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
@@ -104,7 +104,7 @@ func (s Schema) Query() *graphql.Object {
 				Resolve: s.articleResolver.GetArticleByID,
 			},
 			"GetArticleByTitle": &graphql.Field{
-				Type:        Article,
+				Type:        ArticleGraphQL,
 				Description: "Get Article By Title",
 				Args: graphql.FieldConfigArgument{
 					"title": &graphql.ArgumentConfig{
