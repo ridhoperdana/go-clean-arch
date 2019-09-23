@@ -80,7 +80,7 @@ func (s Schema) Query() *graphql.Object {
 	objectConfig := graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-			"fetchArticle": &graphql.Field{
+			"FetchArticle": &graphql.Field{
 				Type:        ArticleResult,
 				Description: "Fetch Article",
 				Args: graphql.FieldConfigArgument{
@@ -93,7 +93,7 @@ func (s Schema) Query() *graphql.Object {
 				},
 				Resolve: s.articleResolver.FetchArticle,
 			},
-			"getArticleByID": &graphql.Field{
+			"GetArticleByID": &graphql.Field{
 				Type:        Article,
 				Description: "Get Article By ID",
 				Args: graphql.FieldConfigArgument{
@@ -103,7 +103,7 @@ func (s Schema) Query() *graphql.Object {
 				},
 				Resolve: s.articleResolver.GetArticleByID,
 			},
-			"getArticleByTitle": &graphql.Field{
+			"GetArticleByTitle": &graphql.Field{
 				Type:        Article,
 				Description: "Get Article By Title",
 				Args: graphql.FieldConfigArgument{
@@ -124,7 +124,7 @@ func (s Schema) Mutation() *graphql.Object {
 	objectConfig := graphql.ObjectConfig{
 		Name: "Mutation",
 		Fields: graphql.Fields{
-			"updateArticle": &graphql.Field{
+			"UpdateArticle": &graphql.Field{
 				Type:        graphql.String,
 				Description: "Update article by certain ID",
 				Args: graphql.FieldConfigArgument{
@@ -140,7 +140,7 @@ func (s Schema) Mutation() *graphql.Object {
 				},
 				Resolve: s.articleResolver.UpdateArticle,
 			},
-			"storeArticle": &graphql.Field{
+			"StoreArticle": &graphql.Field{
 				Type:        graphql.String,
 				Description: "Store a new article",
 				Args: graphql.FieldConfigArgument{
@@ -153,7 +153,7 @@ func (s Schema) Mutation() *graphql.Object {
 				},
 				Resolve: s.articleResolver.StoreArticle,
 			},
-			"deleteArticle": &graphql.Field{
+			"DeleteArticle": &graphql.Field{
 				Type:        graphql.String,
 				Description: "Delete an article by its ID",
 				Args: graphql.FieldConfigArgument{

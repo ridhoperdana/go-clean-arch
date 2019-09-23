@@ -8,13 +8,6 @@ type Article {
     CreatedAt: Time
 }
 
-type Author {
-    ID: Int
-    Name: String
-    CreatedAt: Time
-    UpdatedAt: Time
-}
-
 type Edge {
     cursor: String
     node: Article
