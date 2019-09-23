@@ -7,8 +7,8 @@ import (
 	"github.com/bxcodec/go-clean-arch/article"
 	"github.com/bxcodec/go-clean-arch/article/repository"
 	"github.com/bxcodec/go-clean-arch/models"
+	"time"
 )
-
 
 // ArticleEdge holds information of article edge.
 type ArticleEdge struct {
@@ -87,7 +87,7 @@ func (r resolver) FetchArticle(params graphql.ResolveParams) (interface{}, error
 			EndCursor: cursorFromService,
 			HasNextPage:isHasNextPage,
 		},
-	}, fmt.Errorf("please implement me")
+	}, nil
 }
 
 func (r resolver) GetArticleByID(params graphql.ResolveParams) (interface{}, error) {
@@ -99,7 +99,37 @@ func (r resolver) GetArticleByTitle(params graphql.ResolveParams) (interface{}, 
 }
 
 func (r resolver) UpdateArticle(params graphql.ResolveParams) (interface{}, error) {
-	return nil, fmt.Errorf("please implement me")
+	var (
+		id int
+		title, content string
+		ok bool
+	)
+
+	ctx := context.Background()
+	if id, ok = params.Args["id"].(int); !ok || id == 0 {
+		return nil, fmt.Errorf("id is not integer or zero")
+	}
+
+	if title, ok := params.Args["title"].(string); !ok || title == "" {
+		return nil, fmt.Errorf("title is empty or not string")
+	}
+
+	if content, ok = params.Args["content"].(string); !ok {
+		return nil, fmt.Errorf("content is not string")
+	}
+
+	updatedArticle := &models.Article{
+		ID: int64(id),
+		Title: title,
+		Content: content,
+		UpdatedAt: time.Now(),
+	}
+
+	if err := r.articleService.Update(ctx, updatedArticle); err != nil {
+		return nil, err
+	}
+
+	return *updatedArticle, nil
 }
 
 func (r resolver) StoreArticle(params graphql.ResolveParams) (interface{}, error) {
