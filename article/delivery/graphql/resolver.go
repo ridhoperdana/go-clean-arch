@@ -140,6 +140,8 @@ func (r resolver) DeleteArticle(params graphql.ResolveParams) (interface{}, erro
 	return nil, fmt.Errorf("please implement me")
 }
 
-func NewResolver() Resolver {
-	return &resolver{}
+func NewResolver(articleService article.Usecase) Resolver {
+	return &resolver{
+		articleService:articleService,
+	}
 }
