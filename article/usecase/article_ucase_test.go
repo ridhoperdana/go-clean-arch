@@ -9,10 +9,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
-	"github.com/bxcodec/go-clean-arch/article/mocks"
-	ucase "github.com/bxcodec/go-clean-arch/article/usecase"
-	_authorMock "github.com/bxcodec/go-clean-arch/author/mocks"
-	"github.com/bxcodec/go-clean-arch/models"
+	"github.com/ridhoperdana/go-clean-arch/article/mocks"
+	ucase "github.com/ridhoperdana/go-clean-arch/article/usecase"
+	_authorMock "github.com/ridhoperdana/go-clean-arch/author/mocks"
+	"github.com/ridhoperdana/go-clean-arch/models"
 )
 
 func TestFetch(t *testing.T) {

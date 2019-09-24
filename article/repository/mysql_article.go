@@ -9,8 +9,8 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/bxcodec/go-clean-arch/article"
-	"github.com/bxcodec/go-clean-arch/models"
+	"github.com/ridhoperdana/go-clean-arch/article"
+	"github.com/ridhoperdana/go-clean-arch/models"
 )
 
 const (

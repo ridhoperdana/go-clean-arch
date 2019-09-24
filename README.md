@@ -1,7 +1,7 @@
 # go-clean-arch
 
 ## Looking for the old code ? 
-If you are looking for the old code, you can checkout to the [v1 branch](https://github.com/bxcodec/go-clean-arch/tree/v1)
+If you are looking for the old code, you can checkout to the [v1 branch](https://github.com/ridhoperdana/go-clean-arch/tree/v1)
 
 _Last Updated: May 12th 2018_
 
@@ -25,7 +25,7 @@ This project has  4 Domain layer :
 
 #### The diagram:
 
-![golang clean architecture](https://github.com/bxcodec/go-clean-arch/raw/master/clean-arch.png)
+![golang clean architecture](https://github.com/ridhoperdana/go-clean-arch/raw/master/clean-arch.png)
 
 The explanation about this project's structure  can read from this medium's post : https://medium.com/@imantumorang/golang-clean-archithecture-efd6d7c43047
 
@@ -49,7 +49,7 @@ Here is the steps to run it with `docker-compose`
 $ cd workspace
 
 # Clone into YOUR $GOPATH/src
-$ git clone https://github.com/bxcodec/go-clean-arch.git
+$ git clone https://github.com/ridhoperdana/go-clean-arch.git
 
 #move to project
 $ cd go-clean-arch
@@ -74,10 +74,10 @@ $ make stop
 ### Tools Used:
 In this project, I use some tools listed below. But you can use any simmilar library that have the same purposes. But, well, different library will have different implementation type. Just be creative and use anything that you really need. 
 
-- All libraries listed in [`go.mod`](https://github.com/bxcodec/go-clean-arch/blob/master/go.mod) 
+- All libraries listed in [`go.mod`](https://github.com/ridhoperdana/go-clean-arch/blob/master/go.mod) 
 - ["github.com/vektra/mockery".](https://github.com/vektra/mockery) To Generate Mocks for testing needs.
 
 
 ### Change log 
- - 2018-04-30 : [Move to new projects folder](https://github.com/bxcodec/go-clean-arch/pull/8)
- - 2018-05-09 : [Add Context](https://github.com/bxcodec/go-clean-arch/pull/9)
+ - 2018-04-30 : [Move to new projects folder](https://github.com/ridhoperdana/go-clean-arch/pull/8)
+ - 2018-05-09 : [Add Context](https://github.com/ridhoperdana/go-clean-arch/pull/9)

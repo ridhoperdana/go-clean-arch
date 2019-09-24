@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/graphql-go/graphql"
-	"github.com/bxcodec/go-clean-arch/article"
-	"github.com/bxcodec/go-clean-arch/article/repository"
-	"github.com/bxcodec/go-clean-arch/models"
+	"github.com/ridhoperdana/go-clean-arch/article"
+	"github.com/ridhoperdana/go-clean-arch/article/repository"
+	"github.com/ridhoperdana/go-clean-arch/models"
 	"time"
 )
 
