@@ -3,6 +3,8 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/graphql-go/graphql"
+	"github.com/sirupsen/logrus"
 	"log"
 	"net/url"
 	"os"
@@ -11,12 +13,14 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo"
 	"github.com/spf13/viper"
+	"github.com/graphql-go/handler"
 
-	_articleHttpDeliver "github.com/bxcodec/go-clean-arch/article/delivery/http"
-	_articleRepo "github.com/bxcodec/go-clean-arch/article/repository"
-	_articleUcase "github.com/bxcodec/go-clean-arch/article/usecase"
-	_authorRepo "github.com/bxcodec/go-clean-arch/author/repository"
-	"github.com/bxcodec/go-clean-arch/middleware"
+	_articleHttpDeliver "github.com/ridhoperdana/go-clean-arch/article/delivery/http"
+	_graphQLArticleDelivery "github.com/ridhoperdana/go-clean-arch/article/delivery/graphql"
+	_articleRepo "github.com/ridhoperdana/go-clean-arch/article/repository"
+	_articleUcase "github.com/ridhoperdana/go-clean-arch/article/usecase"
+	_authorRepo "github.com/ridhoperdana/go-clean-arch/author/repository"
+	"github.com/ridhoperdana/go-clean-arch/middleware"
 )
 
 func init() {
@@ -68,6 +72,24 @@ func main() {
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 	au := _articleUcase.NewArticleUsecase(ar, authorRepo, timeoutContext)
 	_articleHttpDeliver.NewArticleHandler(e, au)
+
+	schema := _graphQLArticleDelivery.NewSchema(_graphQLArticleDelivery.NewResolver(au))
+	graphqlSchema, err := graphql.NewSchema(graphql.SchemaConfig{
+		Query:    schema.Query(),
+		Mutation: schema.Mutation(),
+	})
+	if err != nil {
+		logrus.Fatal(err)
+	}
+
+	graphQLHandler := handler.New(&handler.Config{
+		Schema: &graphqlSchema,
+		GraphiQL:true,
+		Pretty:true,
+	})
+
+	e.GET("/graphql", echo.WrapHandler(graphQLHandler))
+	e.POST("/graphql", echo.WrapHandler(graphQLHandler))
 
 	log.Fatal(e.Start(viper.GetString("server.address")))
 }

@@ -1,0 +1,37 @@
+scalar Time
+
+type Article {
+    ID: Int
+    Title: String
+    Content: String
+    UpdatedAt: Time
+    CreatedAt: Time
+}
+
+type Edge {
+    cursor: String
+    node: Article
+}
+
+type PageInfo {
+    endCursor: String
+    hasNextPage: Boolean
+}
+
+type ArticlesResult {
+    edges: [Edge]
+    pageInfo: PageInfo
+    totalCount: Int
+}
+
+type Query {
+    FetchArticle(after: String, first: Int): ArticlesResult
+    GetArticleByID(id: Int): Article
+    GetArticleByTitle(title: String): Article
+}
+
+type Mutation {
+    UpdateArticle(id: Int, title: String, content: String): Article
+    StoreArticle(title: String, content: String): Article
+    DeleteArticle(id: Int): Int
+}
