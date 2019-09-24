@@ -91,11 +91,41 @@ func (r resolver) FetchArticle(params graphql.ResolveParams) (interface{}, error
 }
 
 func (r resolver) GetArticleByID(params graphql.ResolveParams) (interface{}, error) {
-	return nil, fmt.Errorf("please implement me")
+	var (
+		id int
+		ok bool
+	)
+
+	ctx := context.Background()
+	if id, ok = params.Args["id"].(int); !ok || id == 0 {
+		return nil, fmt.Errorf("id is not integer or zero")
+	}
+
+	result, err := r.articleService.GetByID(ctx, int64(id))
+	if err != nil {
+		return nil, err
+	}
+	return *result, nil
 }
 
 func (r resolver) GetArticleByTitle(params graphql.ResolveParams) (interface{}, error) {
-	return nil, fmt.Errorf("please implement me")
+	var (
+		title string
+		ok bool
+	)
+
+	ctx := context.Background()
+
+	if title, ok = params.Args["title"].(string); !ok || title == "" {
+		return nil, fmt.Errorf("title is empty or not string")
+	}
+
+	result, err := r.articleService.GetByTitle(ctx, title)
+	if err != nil {
+		return nil, err
+	}
+
+	return *result, nil
 }
 
 func (r resolver) UpdateArticle(params graphql.ResolveParams) (interface{}, error) {
@@ -110,7 +140,7 @@ func (r resolver) UpdateArticle(params graphql.ResolveParams) (interface{}, erro
 		return nil, fmt.Errorf("id is not integer or zero")
 	}
 
-	if title, ok := params.Args["title"].(string); !ok || title == "" {
+	if title, ok = params.Args["title"].(string); !ok || title == "" {
 		return nil, fmt.Errorf("title is empty or not string")
 	}
 
@@ -133,11 +163,49 @@ func (r resolver) UpdateArticle(params graphql.ResolveParams) (interface{}, erro
 }
 
 func (r resolver) StoreArticle(params graphql.ResolveParams) (interface{}, error) {
-	return nil, fmt.Errorf("please implement me")
+	var (
+		title, content string
+		ok bool
+	)
+
+	ctx := context.Background()
+
+	if title, ok = params.Args["title"].(string); !ok || title == "" {
+		return nil, fmt.Errorf("title is empty or not string")
+	}
+
+	if content, ok = params.Args["content"].(string); !ok {
+		return nil, fmt.Errorf("content is not string")
+	}
+
+	storedArticle := &models.Article{
+		Content: content,
+		Title:title,
+	}
+
+	if err := r.articleService.Store(ctx, storedArticle); err != nil {
+		return nil, err
+	}
+
+	return *storedArticle, nil
 }
 
 func (r resolver) DeleteArticle(params graphql.ResolveParams) (interface{}, error) {
-	return nil, fmt.Errorf("please implement me")
+	var (
+		id int
+		ok bool
+	)
+
+	ctx := context.Background()
+	if id, ok = params.Args["id"].(int); !ok || id == 0 {
+		return nil, fmt.Errorf("id is not integer or zero")
+	}
+
+	if err := r.articleService.Delete(ctx, int64(id)); err != nil {
+		return nil, err
+	}
+
+	return id, nil
 }
 
 func NewResolver(articleService article.Usecase) Resolver {
